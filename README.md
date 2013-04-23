@@ -19,19 +19,19 @@ Todo list
 =========
 
 
-parse header data of main cef file
-parse referenced ceh files
+- parse header data of main cef file
+- parse referenced ceh files
 
-check/validate header meta data
-	filename format
-	correct names
-	data types
-	enumerated types
-	more to follow
+- check/validate header meta data
+	- filename format
+	- correct names
+	- data types
+	- enumerated types
+	- more to follow
 	
-read data records
-check timestamps
-variable data types
-fill-vals
-number of variables
+- read data records
+	- check timestamps
+	- variable data types
+	- fill-vals
+	- number of variables
 more
