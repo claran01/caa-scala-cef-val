@@ -32,6 +32,16 @@ val l_cefSourceReader = new CefSourceReader(l_path)
 //DATA_UNTIL=EOF
 
 
+
+class CefXmlWriter {
+    
+
+
+}
+
+
+
+
 val regexStr = "^[\\s]*([\\w]*)[\\s]*=[\\s]*(.*)[\\s]*$"
 val regexPattern = regexStr.r
 
