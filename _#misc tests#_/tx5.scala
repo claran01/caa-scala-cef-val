@@ -1,5 +1,3 @@
-
-
 //<?xml version="1.0" encoding="UTF-8" ?>
 
 val doc2 = 
@@ -40,40 +38,44 @@ val doc2 =
 </cef>
 
 import scala.collection.mutable.ListBuffer
+import scala.xml.Comment
 import scala.xml.Elem
 import scala.xml.Node
 import scala.xml.NodeSeq
+import scala.xml.NodeBuffer
+import scala.xml.Attribute
+import scala.xml.Text
+import scala.xml.Null
+
+
+class El(tag: String, name: String) {
+	val m_nodes = new NodeBuffer()
+
+	def push(n: Node): Unit  = { m_nodes += n }
+
+//	def toXml(): Node = <tag>{m_nodes}</tag> 
+	def toXml(): NodeSeq = m_nodes
+}
+
 
 class CefXmlWriter {
     
-//    val doc = <cef />
-    val doc = ListBuffer[Node]()
+    val doc = new El("cef", "noname")
     var cur = doc
-    var el = ('g', "g")
 
-    def add_attr(k: String, v: String): Unit = { println("add_attr", k,v); cur += <attr key={k} value={v} /> }
-//    def add_attr(k: String, v: String): Unit = { println("add_attr", k,v); cur += <attr key="{k}" value="{v}"></attr> }
-//    def add_comment(s: String): Unit = { println("add_comment", s); cur += <!-- {s} --> }
-    def add_comment(s: String): Unit = { println("add_comment", s); cur += <comment>{s}</comment> }
+    def add_attr(k: String, v: String): Unit = { cur.push(<attr key={k} value={v} />) }
+//  def add_comment(s: String): Unit = { cur.push(<comment>{s}</comment>) }
+    def add_comment(s: String): Unit = { cur.push( new Comment(s) ) }
+    
+    def start_meta(n: String): Unit = { cur = new El("meta", n) }
+    def end_meta(n: String): Unit = { doc.push(<meta name={n}> {cur.toXml} </meta>) }
 
-    def start(t: Char, n: String): Unit = { 
-        cur = ListBuffer[Node]()
-        el = (t, n)
-    }
+    def start_var(n: String): Unit = { cur = new El("var", n) }
+    def end_var(n: String): Unit = { doc.push(<var name={n}> {cur.toXml} </var>) }
     
-    def end(t: String, n: String): Unit = { 
-        cur = doc 
-        el = ('g', "g")
-        doc += < {t} name={n} >{ for(e <- doc) yield e}</ {t} >
-    }
-    
-    def start_meta(n: String): Unit = start('m', n)
-    def end_meta(n: String): Unit = end("meta", n)
+    def toXml: Elem = <cef>{doc.toXml}</cef>
+    def dump(): Unit = println(toXml)
 
-    def start_var(n: String): Unit = start('v', n)
-    def end_var(n: String): Unit = end("variable", n)
-    
-    def dump(): Unit = { for (e <- doc) println("--> " + e) }
 }
 
 
@@ -87,6 +89,8 @@ W.add_attr("M1NAME","M1 VALUE")
 W.add_comment("! M1 COMMENT GOES HERE")
 W.end_meta("METANAME")
 
+//W.dump
 
+val pp = new scala.xml.PrettyPrinter(80,4);
+println(pp.formatNodes(W.toXml))
 
-W.dump
