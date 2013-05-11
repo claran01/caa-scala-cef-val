@@ -97,86 +97,30 @@ class CefXmlWriter {
 
     def toPrettyXml: String = new scala.xml.PrettyPrinter(80,4).formatNodes(toXml)
     def dumpPrettyXml: Unit = println(toPrettyXml)
-
-    def add_kv(k: String, v: String): Unit = {
-    	if("START_META".compareToIgnoreCase(k) == 0)			start_meta(v) 
-    	else if ("END_META".compareToIgnoreCase(k) == 0)		end_meta(v) 
-    	else if ("START_VARIABLE".compareToIgnoreCase(k) == 0) 	start_var(v) 
-    	else if ("END_VARIABLE".compareToIgnoreCase(k) == 0)	end_var(v) 
-    	else 													add_attr(k,v) 
-
-    	// if("START_META".compareToIgnoreCase(k) == 0)			{ start_meta(v) }
-    	// else if ("END_META".compareToIgnoreCase(k) == 0)		{ end_meta(v) }
-    	// else if ("START_VARIABLE".compareToIgnoreCase(k) == 0) 	{ start_var(v) }
-    	// else if ("END_VARIABLE".compareToIgnoreCase(k) == 0)	{ end_var(v) }
-    	// else 													{ add_attr(k,v) }
-
-    }
-
 }
 
 
 // TESTS
 // ............................................................................
 
-def test_001(): Unit =
-{
-	try {
+try {
 
-		var W = new CefXmlWriter()
+	var W = new CefXmlWriter()
 
-		W.add_attr("FILE_NAME","C3_CP_EDI_EGD__20111009_V01.cef")
-		W.add_comment("! include EGD (DATASET) HEADER File for Cluster-3")
+	W.add_attr("FILE_NAME","C3_CP_EDI_EGD__20111009_V01.cef")
+	W.add_comment("! include EGD (DATASET) HEADER File for Cluster-3")
 
-		W.start_meta("METANAME")
-		W.add_attr("M1NAME","M1 VALUE")
-		W.add_comment("! M1 COMMENT GOES HERE")
-		W.end_meta("METANAME")
+	W.start_meta("METANAME")
+	W.add_attr("M1NAME","M1 VALUE")
+	W.add_comment("! M1 COMMENT GOES HERE")
+	W.end_meta("METANAME")
 
-		W.add_attr("F2","THIS is the value of f2")
-		W.add_comment("! another top level comment") 
+	W.add_attr("F2","THIS is the value of f2")
+	W.add_comment("! another top level comment") 
 
-		W dumpPrettyXml
+	W dumpPrettyXml
 
-	} catch {
-		case _: IllegalArgumentException => println("Execption: start/end tags miss-match")
-	}
-
+} catch {
+	case _: IllegalArgumentException => println("Execption: start/end tags miss-match")
 }
-
-
-def test_002(): Unit =
-{
-	try {
-
-		var W = new CefXmlWriter()
-
-		W.add_kv("FILE_NAME","C3_CP_EDI_EGD__20111009_V01.cef")
-		W.add_comment("! include EGD (DATASET) HEADER File for Cluster-3")
-
-		W.add_kv("START_META", "METANAME")
-		W.add_kv("M1NAME","M1 VALUE")
-		W.add_comment("! M1 COMMENT GOES HERE")
-		W.add_kv("END_META","METANAME")
-
-		W.add_kv("F2","THIS is the value of f2")
-		W.add_comment("! another top level comment") 
-
-
-		W.add_kv("START_VARIABLE", "VARIABLENAME")
-		W.add_kv("V1NAME","V1 VALUE")
-		W.add_comment("! V1 COMMENT GOES HERE")
-		W.add_kv("END_VARIABLE","VARIABLENAME")
-
-		W dumpPrettyXml
-
-	} catch {
-		case _: IllegalArgumentException => println("Execption: start/end tags miss-match")
-	}
-
-}
-
-
-//test_001()
-test_002()
 
