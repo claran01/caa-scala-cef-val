@@ -1,13 +1,11 @@
 package main
 
-import java.io.{FileInputStream,
-                FileOutputStream,
-                IOException,
-                InputStreamReader}
+import java.io.FileInputStream
 import java.util.zip.GZIPInputStream
 
 import scala.io.Source
-import scala.util.control.Breaks.{break, breakable}
+import scala.util.control.Breaks.break
+import scala.util.control.Breaks.breakable
 
 class CefSourceReader(val i_path: String) {
 
@@ -29,6 +27,8 @@ class CefSourceReader(val i_path: String) {
 class CefHeaderReader(val i_path: String) {
     val m_cefSourceReader = new CefSourceReader(i_path)
     val regexStr = "^[\\s]*([\\w]*)[\\s]*=[\\s]*(.*)[\\s]*$"
+    val regexCommentStr = "^[\\s]*!.*$"
+
     val regexPattern = regexStr.r
 
     var W = new CefXmlWriter()
@@ -38,15 +38,30 @@ class CefHeaderReader(val i_path: String) {
 
             if(l.matches(regexStr) == true) {
                 val regexPattern(k, v) = l
-
-                println(k + " ---------- "+ v)
+                W.add_kv(k, v)
+                println(" :: kv " + k + " ---------- " + v)
 
                 if("DATA_UNTIL".compareToIgnoreCase(k) == 0) break()
             }
+            else if(l.matches(regexCommentStr) == true) {
+                println(" :: c  " + l)
+                W.add_comment(l)
+            }
+            else if(l.length == 0) {
+                // ignore
+                println(" :: -  ")
+            }
+            else {
+                // malformed line => quit processing
+                // throw CefMalformedHeaderLine
+                println(" XX -> " + l)
+            }
 
-            println("<-->")
+            // println("<-->")
         }
     }
+
+    W dumpPrettyXml
 
     m_cefSourceReader.close();
 }

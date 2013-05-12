@@ -1,14 +1,11 @@
 package main
 
-import scala.collection.mutable.ListBuffer
 import scala.xml.Comment
 import scala.xml.Elem
 import scala.xml.Node
-import scala.xml.NodeSeq
 import scala.xml.NodeBuffer
-import scala.xml.Attribute
-import scala.xml.Text
-import scala.xml.Null
+import scala.xml.NodeSeq
+import scala.xml.NodeSeq.seqToNodeSeq
 
 class CefXmlWriter {
 
@@ -23,8 +20,8 @@ class CefXmlWriter {
 		def end_matches(i_tag: String, i_name: String): Unit = 
 			if((tag == i_tag && name == i_name) == false)
 				throw new IllegalArgumentException("start/end tags should match")
-			else
-				println("Ok")
+			// else
+			// 	println("Ok")
 	}
 
 
@@ -32,8 +29,23 @@ class CefXmlWriter {
     val doc = new El("cef", "noname")
     var cur = doc
 
-    def add_attr(k: String, v: String): Unit = { cur.push(<attr key={k} value={v} />) }
-    def add_comment(s: String): Unit = { cur.push( new Comment(s) ) }
+//    def add_attr(k: String, v: String): Unit = { cur.push(<attr key={k} value={v} />) }
+    def add_attr(k: String, v: String): Unit = { 
+        val l = v.length
+        
+        if(l >= 2 && v.charAt(0) == '\"' && v.charAt(l-1) == '\"') {
+            cur.push(<attr key={k} value={v.substring(1,l-1)} type="String" />) 
+        }
+        else
+            cur.push(<attr key={k} value={v} />) 
+    }
+
+
+
+    def add_comment(s: String): Unit = {
+    //    cur.push( new Comment(s) ) 
+        cur.push(<comment>{s}</comment>) 
+    }
     
     def start_meta(n: String): Unit = { 
     	cur = new El("meta", n) 
