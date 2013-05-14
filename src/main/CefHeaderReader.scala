@@ -26,7 +26,7 @@ class CefSourceReader(val i_path: String) {
 
 class CefHeaderReader(val i_path: String) {
     val m_cefSourceReader = new CefSourceReader(i_path)
-    val regexStr = "^[\\s]*([\\w]*)[\\s]*=[\\s]*(.*)[\\s]*$"
+    val regexStr = "^[\\s]*([\\w]*)[\\s]*=[\\s]*(.*?)[\\s]*$"
     val regexCommentStr = "^[\\s]*!.*$"
 
     val regexPattern = regexStr.r
@@ -38,23 +38,21 @@ class CefHeaderReader(val i_path: String) {
 
             if(l.matches(regexStr) == true) {
                 val regexPattern(k, v) = l
+
                 W.add_kv(k, v)
-                println(" :: kv " + k + " ---------- " + v)
 
                 if("DATA_UNTIL".compareToIgnoreCase(k) == 0) break()
             }
             else if(l.matches(regexCommentStr) == true) {
-                println(" :: c  " + l)
                 W.add_comment(l)
             }
             else if(l.length == 0) {
                 // ignore
-                println(" :: -  ")
             }
             else {
                 // malformed line => quit processing
                 // throw CefMalformedHeaderLine
-                println(" XX -> " + l)
+                throw new IllegalArgumentException("Unknown line type, Neither Attribute, Comment, or Empty Line -> " + l)
             }
 
             // println("<-->")
@@ -62,6 +60,19 @@ class CefHeaderReader(val i_path: String) {
     }
 
     W dumpPrettyXml
+
+    val x = W toXml
+
+    println("++++++++++++++")
+    println(x)
+    println("--------------")
+    
+    
+
+//    println(x \\ "cef" \ "var")
+    val vars = x \\ "var" \\ "@name"
+    for (v <- vars) println(v)
+
 
     m_cefSourceReader.close();
 }

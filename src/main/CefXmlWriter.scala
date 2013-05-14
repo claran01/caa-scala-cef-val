@@ -18,8 +18,11 @@ class CefXmlWriter {
 		def toXml(): NodeSeq = m_nodes
 
 		def end_matches(i_tag: String, i_name: String): Unit = 
-			if((tag == i_tag && name == i_name) == false)
+			if((tag == i_tag && name == i_name) == false) {
+                println(tag, i_tag, name, i_name, tag == i_tag, name == i_name)
+
 				throw new IllegalArgumentException("start/end tags should match")
+            }
 			// else
 			// 	println("Ok")
 	}
@@ -70,7 +73,7 @@ class CefXmlWriter {
     def toXml: Elem = <cef>{doc.toXml}</cef>
     def dump(): Unit = println(toXml)
 
-    def toPrettyXml: String = new scala.xml.PrettyPrinter(80,4).formatNodes(toXml)
+    def toPrettyXml: String = new scala.xml.PrettyPrinter(160,2).formatNodes(toXml)
     def dumpPrettyXml: Unit = println(toPrettyXml)
 
     def add_kv(k: String, v: String): Unit = {
