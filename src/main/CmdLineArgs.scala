@@ -3,14 +3,20 @@ package main
 
 object CmdLineArgs {
 
-    var m_include_folders = List(
-    	"/home/spw/Library/__CEF_CEH_SAMPLES__/_CEF_CEH_EXAMPLES_2013_VALIDATOR_/CEF",
-    	"/home/spw/Library/__CEF_CEH_SAMPLES__/_CEF_CEH_EXAMPLES_2013_VALIDATOR_/HEADERS/EFW",
-    	"/home/spw/Library/__CEF_CEH_SAMPLES__/_CEF_CEH_EXAMPLES_2013_VALIDATOR_/HEADERS/EDI",
-    	"/home/spw/Library/__CEF_CEH_SAMPLES__/_CEF_CEH_EXAMPLES_2013_VALIDATOR_/HEADERS"
-    	    	)
+    val CEF_CEH_EXAMPLES_2013_ROOT_WINDOWS = "C:/_CEF_CEH_EXAMPLES_2013_VALIDATOR_"
+    val CEF_CEH_EXAMPLES_2013_ROOT_LINUX = "/home/spw/Library/__CEF_CEH_SAMPLES__/_CEF_CEH_EXAMPLES_2013_VALIDATOR_"
 
-//    def getIncludeFolders(): List[String] = { m_include_folders }
+    val CEF_CEH_EXAMPLES_2013_ROOT = CEF_CEH_EXAMPLES_2013_ROOT_WINDOWS
+
+    val CEF_TEST_DATA_ROOT = CEF_CEH_EXAMPLES_2013_ROOT + "/CEF"
+
+    var m_include_folders = List(
+    	CEF_CEH_EXAMPLES_2013_ROOT + "/CEF",
+    	CEF_CEH_EXAMPLES_2013_ROOT + "/HEADERS/EFW",
+    	CEF_CEH_EXAMPLES_2013_ROOT + "/HEADERS/EDI",
+    	CEF_CEH_EXAMPLES_2013_ROOT + "/HEADERS"
+    	)
+
     def getIncludeFolders: List[String] =  m_include_folders 
 
 }

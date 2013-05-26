@@ -142,7 +142,7 @@ class CefHeaderReader(val i_path: String,
         for (v <- vars) println(v)
     }
 
-    dump
+    // dump
 
     m_cefSourceReader.close();
 }

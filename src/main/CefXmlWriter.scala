@@ -16,7 +16,6 @@ class CefXmlWriter {
         def error(i_message: String): Unit = throw new IllegalArgumentException("CefXmlWriter:El: " + i_message)
 
 		def push(n: Node): Unit  = { m_nodes += n }
-//        def push(ns: NodeSeq): Unit  = { m_nodes += ns }
 
         def push(ns: NodeSeq): Unit  = { for(n <- ns) m_nodes += n }
 
@@ -34,14 +33,12 @@ class CefXmlWriter {
 			// 	println("Ok")
 	}
 
-
     
     val doc = new El("cef", "noname")
     var cur = doc
 
     def error(i_message: String): Unit = throw new IllegalArgumentException("CefXmlWriter: " + i_message) 
 
-//    def add_attr(k: String, v: String): Unit = { cur.push(<attr key={k} value={v} />) }
     def add_attr(k: String, v: String): Unit = { 
         val l = v.length
         
@@ -52,7 +49,6 @@ class CefXmlWriter {
             cur.push(<attr key={k} value={v} />) 
     }
 
-//    def add_xml(x: NodeSeq): Unit = {
     def add_xml(x: NodeSeq): Unit = {
         if (cur == doc) {
             cur.push(x)
