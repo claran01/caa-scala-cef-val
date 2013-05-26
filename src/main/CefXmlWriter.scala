@@ -13,15 +13,22 @@ class CefXmlWriter {
 	class El(tag: String, name: String) {
 		val m_nodes = new NodeBuffer()
 
-		def push(n: Node): Unit  = { m_nodes += n }
+        def error(i_message: String): Unit = throw new IllegalArgumentException("CefXmlWriter:El: " + i_message)
 
-		def toXml(): NodeSeq = m_nodes
+		def push(n: Node): Unit  = { m_nodes += n }
+//        def push(ns: NodeSeq): Unit  = { m_nodes += ns }
+
+        def push(ns: NodeSeq): Unit  = { for(n <- ns) m_nodes += n }
+
+        
+        def toXml(): NodeSeq = m_nodes
 
 		def end_matches(i_tag: String, i_name: String): Unit = 
 			if((tag == i_tag && name == i_name) == false) {
                 println(tag, i_tag, name, i_name, tag == i_tag, name == i_name)
 
-				throw new IllegalArgumentException("start/end tags should match")
+				// throw new IllegalArgumentException("start/end tags should match")
+                error("start/end tags should match")
             }
 			// else
 			// 	println("Ok")
@@ -31,6 +38,8 @@ class CefXmlWriter {
     
     val doc = new El("cef", "noname")
     var cur = doc
+
+    def error(i_message: String): Unit = throw new IllegalArgumentException("CefXmlWriter: " + i_message) 
 
 //    def add_attr(k: String, v: String): Unit = { cur.push(<attr key={k} value={v} />) }
     def add_attr(k: String, v: String): Unit = { 
@@ -43,7 +52,14 @@ class CefXmlWriter {
             cur.push(<attr key={k} value={v} />) 
     }
 
-
+//    def add_xml(x: NodeSeq): Unit = {
+    def add_xml(x: NodeSeq): Unit = {
+        if (cur == doc) {
+            cur.push(x)
+        }
+        else
+            error("Attempting to add xml node to non root node")
+    }
 
     def add_comment(s: String): Unit = {
     //    cur.push( new Comment(s) ) 
@@ -70,6 +86,7 @@ class CefXmlWriter {
     	cur = doc
     }
     
+    def toXmlInner: NodeSeq = doc.toXml
     def toXml: Elem = <cef>{doc.toXml}</cef>
     def dump(): Unit = println(toXml)
 
