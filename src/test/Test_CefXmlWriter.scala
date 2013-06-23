@@ -25,6 +25,9 @@ object Test_CefXmlWriter extends App {
 		W.add_comment("! V1 COMMENT GOES HERE")
 		W.add_kv("END_VARIABLE","VARIABLENAME")
 
+
+		W.add_comment(" !---- CAA MERGED CEF FILE (2012-11-03T17:05:36Z) ---- ")
+
 		W dumpPrettyXml
 
 	} 
